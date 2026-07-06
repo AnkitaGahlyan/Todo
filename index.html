@@ -1,0 +1,105 @@
+ <html lang="en">
+
+ <head>
+
+
+
+meta charset="UTF-8" />
+
+ <meta name="viewport" content="width=device-width,
+
+initial-scale=1.0" />
+
+
+
+<title>Document</title>
+
+ <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+ </head>
+
+ <body>
+ let frame2 = document.createElement("div");
+ frame2.style.display = "none";
+ frame2.classList = "border-2 border-purple-300 bg-purple-100";
+ let tasks = retrieveFromLocalStorage();
+ if (tasks == null) {
+ tasks = [];
+ } else {
+ for (let i = 0; i <tasks.length; i++) {
+ let task tasks [i];
+ addToFrame2(task.taskName, task.description);
+ }
+ }
+ // [
+ // {
+ // taskName: "Running",
+ // description: "I have to run at 5 am"
+ // },{}
+ // ]
+ let msgDiv = document.createElement("div");
+ msgDiv.innerText = "There is no task";
+ msgDiv.classList = "border-2 bg-red-300";
+ msgDiv.id = "msg-block";
+ let mainFrame = document.getElementById("main-frame");
+ let addButton = document.createElement("button");
+ addButton.innerText = "Add";
+ addButton.classList =
+ "rounded-sm border-2 border-green-300 bg-green-500 h-10 w-20";
+ addButton.addEventListener("click", hideAndShow);
+ let showHideTasksButton =document.createElement("button");
+ showHideTasksButton.innerText = "Show";
+ showHideTasksButton.classList ="rounded-sm border-2 border-green-300 bg-green-500 h-10 w-20";
+ showHideTasksButton.addEventListener("click", showAndHideButton);
+ function showAndHideButton() {
+ if (showHideTasksButton.innerText == "Sho 25/06/2026);
+
+ 16:09
+ showHideTasksButton.innerText = "Hide";
+ } else {
+ showHideTasksButton.innerText = "Show";
+ }
+ hideAndShow();
+ }
+ // Frame1 work
+
+ let frame1 = document.createElement("div");
+ frame1.style.display="block";
+
+ frame1.classList = "border-2 border-blue-300 bg-blue-100";
+ let input document.createElement("input");
+ input.id = "input-data";
+ input.placeholder = "type task name....";
+ input.classList = "border-2 bg-red-200";
+ let description = document.createElement("textarea");
+ description.placeholder="type task description...";
+ description.id = "description-data";
+ description.classList = "border-2 bg-yellow-200";
+ let addItemButton = document.createElement("but3706/2026 16:00or
+ addItemButton.innerText = "Add Item";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <div id="main-frame"></div>
+
+ <script src="./todo1.js"></script>
+
+ </body>
+
+</html>

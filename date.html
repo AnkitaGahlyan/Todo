@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Date and Time using DOM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #dateTime {
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            background: blue;
+            padding: 20px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="dateTime"></div>
+
+    <script>
+        const dateElement = document.getElementById("dateTime");
+
+        function showDateTime() {
+            const now = new Date();
+            dateElement.innerHTML = now.toLocaleString();
+        }
+
+        showDateTime();
+
+        setInterval(showDateTime, 1000);
+    </script>
+
+</body>
+</html>

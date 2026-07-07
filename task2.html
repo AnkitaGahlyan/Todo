@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple Task</title>
+<style>
+body { font-family: Arial; background: #390303; padding: 20px; }
+#mainDiv { max-width: 400px; margin: auto; }
+button { padding: 10px 20px; margin: 5px; cursor: pointer; border: none; border-radius: 5px; }
+input { width: 100%; padding: 8px; margin: 5px 0; box-sizing: border-box; }
+.taskItem { background: white; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+.hidden { display: none; }
+.done { background: #d4edda; text-decoration: line-through; }
+.editBtn { background: orange; color: white; }
+.binBtn { background: rgba(79, 118, 160, 0.187); color: white; }
+.doneBtn { background: rgb(34, 144, 107); color: white; }
+.addBtn { background: rgb(162, 255, 0); color: white; }
+.saveBtn { background: rgb(255, 0, 0); color: white; }
+</style>
+</head>
+<body>
+
+<div id="mainDiv">
+    <h2 style="text-align:center;"></h2>
+    
+    <div id="addBtnDiv" style="text-align:center;">
+        <button class="addBtn" id="addBtn">ADD</button>
+    </div>
+
+    <div id="formDiv" class="hidden">
+        <input type="text" id="taskBox" placeholder="Enter task">
+        <input type="text" id="descBox" placeholder="Enter description">
+        <button class="saveBtn" id="saveBtn">Save</button>
+    </div>
+
+    <div id="taskList"></div>
+</div>
+
+<script>
+let addBtn = document.getElementById("addBtn");
+let addBtnDiv = document.getElementById("addBtnDiv");
+let formDiv = document.getElementById("formDiv");
+let taskBox = document.getElementById("taskBox");
+let descBox = document.getElementById("descBox");
+let saveBtn = document.getElementById("saveBtn");
+let taskList = document.getElementById("taskList");
+
+let editingItem = null;
+
+formDiv.classList.add("hidden");
+
+
+addBtn.onclick = function() {
+    addBtnDiv.classList.add("hidden");
+    formDiv.classList.remove("hidden");
+    taskBox.focus();
+}
+
+saveBtn.onclick = function() {
+    let task = taskBox.value.trim();
+    let desc = descBox.value.trim();
+
+    if(task == "" || desc == "") {
+        alert("Please enter task and description");
+        return;
+    }
+
+    if(editingItem != null) {
+
+        editingItem.querySelector(".taskText").innerHTML = task;
+        editingItem.querySelector(".descText").innerHTML = desc;
+        editingItem = null;
+    } else {
+
+        addTask(task, desc);
+    }
+
+    taskBox.value = "";
+    descBox.value = "";
+    formDiv.classList.add("hidden");
+    addBtnDiv.classList.remove("hidden");
+}
+
+function addTask(task, desc) {
+    let div = document.createElement("div");
+    div.className = "taskItem";
+
+    div.innerHTML = 
+        "<h3 class='taskText'>" + task + "</h3>" +
+        "<p class='descText'>" + desc + "</p>" +
+        "<button class='editBtn'>Edit</button>" +
+        "<button class='binBtn'>Bin</button>" +
+        "<button class='doneBtn'>Done</button>";
+
+    div.querySelector(".editBtn").onclick = function() {
+        taskBox.value = div.querySelector(".taskText").innerHTML;
+        descBox.value = div.querySelector(".descText").innerHTML;
+        editingItem = div;
+        formDiv.classList.remove("hidden");
+        addBtnDiv.classList.add("hidden");
+        div.appendChild(formdiv);
+    }
+
+    
+    div.querySelector(".binBtn").onclick = function() {
+        div.remove();
+    }
+
+
+    div.querySelector(".doneBtn").onclick = function() {
+        div.classList.toggle("done");
+        if(div.querySelector(".doneBtn").innerHTML == "Done") {
+            div.querySelector(".doneBtn").innerHTML = "Undo";
+            div.querySelector(".doneBtn").style.background = "green";
+        } else {
+            div.querySelector(".doneBtn").innerHTML = "Done";
+            div.querySelector(".doneBtn").style.background = "gray";
+        }
+    }
+
+    taskList.appendChild(div);
+}
+</script>
+
+</body>
+</html>

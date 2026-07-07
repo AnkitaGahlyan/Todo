@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dogs need</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Manrope',sans-serif;}
+body{background:#f2ede3;padding:24px;color:#233229;}
+.header{text-align:center;margin-bottom:32px;padding:26px;background:#2d6a4f;border-radius:4px;color:#f2ede3;position:relative;overflow:hidden;}
+.header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:6px;background:#f4a261;}
+.header h1{font-family:'Fraunces',serif;font-size:34px;letter-spacing:0.5px;font-weight:700;}
+.header p{margin-top:6px;font-size:13px;letter-spacing:2px;text-transform:uppercase;opacity:0.85;}
+.container{max-width:1400px;margin:auto;display:flex;gap:24px;flex-wrap:wrap;}
+.products{flex:2;min-width:350px;}
+.cart-section{flex:1;min-width:320px;position:sticky;top:20px;height:fit-content;}
+.box{background:#fffdf8;padding:22px;border-radius:4px;border:1px solid #ddd3bd;}
+h2{margin-bottom:16px;color:#233229;font-family:'Fraunces',serif;font-size:22px;border-bottom:3px solid #f4a261;padding-bottom:10px;display:inline-block;}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;}
+.product-card{background:#fffdf8;padding:14px;border-radius:4px;border:1px solid #e3dac2;transition:.25s;}
+.product-card:hover{box-shadow:0 6px 18px rgba(45,106,79,0.15);transform:translateY(-4px);border-color:#2d6a4f;}
+.product-img{width:100%;height:170px;object-fit:cover;border-radius:3px;margin-bottom:10px;filter:saturate(1.05);}
+.product-card h3{font-family:'Fraunces',serif;font-size:16px;margin-bottom:4px;color:#1c2a20;}
+.product-desc{font-size:12px;color:#6b6155;margin-bottom:8px;height:32px;overflow:hidden;line-height:1.4;}
+.price{color:#2d6a4f;font-weight:700;font-size:19px;margin-bottom:6px;font-family:'Fraunces',serif;}
+.stock{font-size:10px;padding:3px 9px;border-radius:2px;display:inline-block;margin-bottom:10px;letter-spacing:0.5px;text-transform:uppercase;font-weight:700;}
+.in-stock{background:#e0efe6;color:#2d6a4f;}
+.out-stock{background:#f7e2df;color:#a3372a;}
+.btn{padding:9px 12px;border:none;border-radius:3px;cursor:pointer;font-weight:700;font-size:13px;width:100%;letter-spacing:0.3px;text-transform:uppercase;}
+.add-btn{background:#2d6a4f;color:#fff;margin-bottom:8px;}
+.add-btn:hover{background:#23543e;}
+.add-btn:disabled{background:#c9c2b0;cursor:not-allowed;}
+.card-footer{display:flex;justify-content:space-between;align-items:center;}
+.card-footer span:first-child{font-size:11px;color:#6b6155;text-transform:uppercase;letter-spacing:0.5px;}
+.wishlist{font-size:22px;cursor:pointer;}
+.wishlist.active{filter:none;}
+.cart-item{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #e3dac2;align-items:center;}
+.cart-img{width:52px;height:52px;object-fit:cover;border-radius:3px;}
+.cart-details{flex:1;}
+.cart-details h4{font-size:14px;font-family:'Fraunces',serif;}
+.cart-details p{font-size:12px;color:#6b6155;}
+.qty-control{display:flex;align-items:center;gap:8px;margin-top:4px;}
+.qty-btn{width:24px;height:24px;border:1px solid #ddd3bd;background:#fffdf8;border-radius:3px;cursor:pointer;font-size:14px;}
+.remove-btn{background:#a3372a;color:white;padding:4px 8px;font-size:10px;margin-top:6px;width:100%;letter-spacing:0.5px;}
+.total{margin-top:16px;padding-top:16px;border-top:3px solid #f4a261;font-size:19px;font-weight:700;text-align:right;font-family:'Fraunces',serif;}
+.empty-cart{text-align:center;color:#8a8272;padding:34px;font-style:italic;}
+.category-tag{font-size:9px;background:#eae2cc;padding:3px 8px;border-radius:2px;color:#5a5241;letter-spacing:0.5px;text-transform:uppercase;font-weight:700;}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Paws & Co.</h1>
+  <p>Everything your dog or cat actually needs</p>
+</div>
+<div class="container">
+  <div class="products box">
+    <h2>Full Catalog</h2>
+    <div class="product-grid" id="productList"></div>
+  </div>
+  <div class="cart-section box">
+    <h2>Your Basket</h2>
+    <div id="cartItems"></div>
+    <div class="total" id="cartTotal">Total: $0</div>
+  </div>
+</div>
+<script>
+const catalog = [
+  // FOOD & TREATS
+  {id: 1, name: "Grain-Free Dog Kibble", price: 42, inStock: true, wishlist: false, category: "Food", img: "https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?w=400", desc: "Chicken and sweet potato, 15lb bag"},
+  {id: 2, name: "Freeze-Dried Cat Treats", price: 14, inStock: true, wishlist: false, category: "Food", img: "https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=400", desc: "Single-ingredient real salmon bites"},
+  {id: 3, name: "Dental Chew Sticks", price: 11, inStock: true, wishlist: false, category: "Food", img: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400", desc: "Reduces plaque, pack of 12"},
+  {id: 4, name: "Puppy Training Treats", price: 9, inStock: false, wishlist: false, category: "Food", img: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400", desc: "Tiny soft bites for reward training"},
+  {id: 5, name: "Catnip Blend Jar", price: 7, inStock: true, wishlist: false, category: "Food", img: "https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=400", desc: "Premium dried catnip, 2oz jar"},
+
+  // TOYS
+  {id: 6, name: "Squeaky Plush Fox", price: 13, inStock: true, wishlist: false, category: "Toys", img: "https://images.unsplash.com/photo-1591946614720-90a587da4a36?w=400", desc: "Durable stitched plush with squeaker"},
+  {id: 7, name: "Feather Wand Teaser", price: 8, inStock: true, wishlist: false, category: "Toys", img: "https://images.unsplash.com/photo-1601758124510-52d02ddb7cbd?w=400", desc: "Interactive wand for indoor cats"},
+  {id: 8, name: "Rope Tug Toy", price: 10, inStock: true, wishlist: false, category: "Toys", img: "https://images.unsplash.com/photo-1544568100-847a948585b9?w=400", desc: "Cotton rope, great for tug-of-war"},
+  {id: 9, name: "Puzzle Feeder Ball", price: 16, inStock: false, wishlist: false, category: "Toys", img: "https://images.unsplash.com/photo-1601758064135-c1b1e6845c5c?w=400", desc: "Slow-feed treat dispensing ball"},
+  {id: 10, name: "Laser Pointer Pen", price: 6, inStock: true, wishlist: false, category: "Toys", img: "https://images.unsplash.com/photo-1615796153287-98eacf0abb13?w=400", desc: "Compact clicker laser for playtime"},
+
+  // WALKING & TRAVEL
+  {id: 11, name: "Padded No-Pull Harness", price: 29, inStock: true, wishlist: false, category: "Walking", img: "https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?w=400", desc: "Adjustable chest harness, reflective trim"},
+  {id: 12, name: "Retractable Leash", price: 21, inStock: true, wishlist: false, category: "Walking", img: "https://images.unsplash.com/photo-1544568100-847a948585b9?w=400", desc: "16ft cord with one-button lock"},
+  {id: 13, name: "Travel Carrier Bag", price: 48, inStock: true, wishlist: false, category: "Walking", img: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=400", desc: "Airline-approved soft-sided carrier"},
+  {id: 14, name: "Collapsible Travel Bowl", price: 9, inStock: true, wishlist: false, category: "Walking", img: "https://images.unsplash.com/photo-1583512603805-3cc6b41f3edb?w=400", desc: "Silicone bowl folds flat for hikes"},
+
+  // HOME & COMFORT
+  {id: 15, name: "Orthopedic Dog Bed", price: 76, inStock: true, wishlist: false, category: "Home", img: "https://images.unsplash.com/photo-1520444451991-2604d4ac4ca9?w=400", desc: "Memory foam base, washable cover"},
+  {id: 16, name: "Cat Tree Tower", price: 89, inStock: true, wishlist: false, category: "Home", img: "https://images.unsplash.com/photo-1519052537078-e6302a4968e4?w=400", desc: "3-level tower with scratch posts"},
+  {id: 17, name: "Self-Cleaning Litter Box", price: 135, inStock: true, wishlist: false, category: "Home", img: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=400", desc: "Automatic rake cycle, odor sealed"},
+  {id: 18, name: "Heated Pet Blanket", price: 33, inStock: true, wishlist: false, category: "Home", img: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=400", desc: "Low-voltage warming mat for winter"},
+  {id: 19, name: "Slow Feeder Bowl", price: 15, inStock: true, wishlist: false, category: "Home", img: "https://images.unsplash.com/photo-1585846888147-303d39253853?w=400", desc: "Ridged design slows fast eaters"},
+  {id: 20, name: "Grooming Brush Kit", price: 24, inStock: true, wishlist: false, category: "Home", img: "https://images.unsplash.com/photo-1601979031925-424e53b6caaa?w=400", desc: "De-shedding brush and nail trimmer set"}
+];
+
+let pack = [];
+
+function paintCatalog() {
+  const grid = document.getElementById("productList");
+  grid.innerHTML = "";
+
+  catalog.forEach(item => {
+    const packed = pack.find(p => p.id === item.id);
+    grid.innerHTML += `
+      <div class="product-card">
+        <img src="${item.img}" class="product-img" alt="${item.name}">
+        <span class="category-tag">${item.category}</span>
+        <h3>${item.name}</h3>
+        <p class="product-desc">${item.desc}</p>
+        <p class="price">$${item.price}</p>
+        <span class="stock ${item.inStock ? 'in-stock' : 'out-stock'}">
+          ${item.inStock ? 'In Stock' : 'Out of Stock'}
+        </span>
+        <button class="btn add-btn" onclick="packItem(${item.id})" ${!item.inStock ? 'disabled' : ''}>
+          ${packed ? 'Added' : 'Add to Basket'}
+        </button>
+        <div class="card-footer">
+          <span>Favorite</span>
+          <span class="wishlist ${item.wishlist ? 'active' : ''}" onclick="toggleFavorite(${item.id})">
+            ${item.wishlist ? '⭐' : '☆'}
+          </span>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function packItem(id) {
+  const item = catalog.find(p => p.id === id);
+  const existing = pack.find(p => p.id === id);
+  if (!item.inStock) return;
+  if (existing) { existing.qty += 1; } else { pack.push({...item, qty: 1}); }
+  paintPack(); paintCatalog();
+}
+
+function unpackItem(id) {
+  pack = pack.filter(p => p.id !== id);
+  paintPack(); paintCatalog();
+}
+
+function bumpUp(id) {
+  const item = pack.find(p => p.id === id);
+  if (item) { item.qty += 1; paintPack(); }
+}
+
+function bumpDown(id) {
+  const item = pack.find(p => p.id === id);
+  if (item && item.qty > 1) { item.qty -= 1; } else { unpackItem(id); return; }
+  paintPack();
+}
+
+function toggleFavorite(id) {
+  const item = catalog.find(p => p.id === id);
+  item.wishlist = !item.wishlist;
+  paintCatalog();
+}
+
+function paintPack() {
+  const cartItems = document.getElementById("cartItems");
+  const cartTotal = document.getElementById("cartTotal");
+
+  if (pack.length === 0) {
+    cartItems.innerHTML = `<div class="empty-cart">Your basket is empty</div>`;
+    cartTotal.innerHTML = `Total: $0`;
+    return;
+  }
+
+  cartItems.innerHTML = "";
+  let total = 0;
+
+  pack.forEach(item => {
+    total += item.price * item.qty;
+    cartItems.innerHTML += `
+      <div class="cart-item">
+        <img src="${item.img}" class="cart-img">
+        <div class="cart-details">
+          <h4>${item.name}</h4>
+          <p>$${item.price} x ${item.qty}</p>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="bumpDown(${item.id})">-</button>
+            <span>${item.qty}</span>
+            <button class="qty-btn" onclick="bumpUp(${item.id})">+</button>
+          </div>
+          <button class="btn remove-btn" onclick="unpackItem(${item.id})">Remove</button>
+        </div>
+      </div>
+    `;
+  });
+
+  cartTotal.innerHTML = `Total: $${total}`;
+}
+
+paintCatalog();
+paintPack();
+</script>
+</body>
+</html>
